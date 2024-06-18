@@ -1,0 +1,87 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>Homepage</title>
+  </head>
+  <body>
+    <div class="topnav">
+      <a class="active" href="/">Home</a>
+      <a href="/create">Create User</a>
+    </div>
+    <!-- <div class="form">
+      <form action="/createUser" method="POST">
+        <fieldset>
+          <legend>Form Add New User</legend>
+          <div class="input-group">
+            <label for="">Email:</label>
+            <input type="text" name="email" />
+          </div>
+          <div class="input-group">
+            <label for="">Name:</label>
+            <input type="text" name="name" />
+          </div>
+          <div class="input-group">
+            <label for="">City:</label>
+            <input type="text" name="city" />
+          </div>
+          <div>
+            <button>Save</button>
+          </div>
+        </fieldset>
+      </form>
+    </div> -->
+    <h1>List User</h1>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Email</th>
+          <th>Name</th>
+          <th>City</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- <% for (let i = 0; i < listUser.length; i++) {%>
+        <tr>
+          <td><%= listUser[i].id %></td>
+          <td><%= listUser[i].email %></td>
+          <td><%= listUser[i].name %></td>
+          <td><%= listUser[i].city %></td>
+          <td>
+            <button>Edit</button>
+            <button>Delete</button>
+          </td>
+        </tr>
+        <% } %>  -->
+        <% listUser.forEach(function(user,index) { %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><%= user.email %></td>
+          <td><%= user.name %></td>
+          <td><%= user.city %></td>
+          <td>
+            <button><a href="/update/<%= user.id %>">Edit</a></button>
+            <form action="/deleteUser/<%= user.id %>" method="post">
+              <button>Delete</button>
+            </form>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </body>
+</html>
