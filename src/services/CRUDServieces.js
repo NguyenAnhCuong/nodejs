@@ -29,4 +29,6 @@ const deletUserById = async (userId) => {
   );
 };
 
+const getUser = () => {};
+
 module.exports = { deletUserById, updateUserById, getAllUser, getUserById };
