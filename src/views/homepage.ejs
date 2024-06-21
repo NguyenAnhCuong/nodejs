@@ -55,18 +55,6 @@
         </tr>
       </thead>
       <tbody>
-        <!-- <% for (let i = 0; i < listUser.length; i++) {%>
-        <tr>
-          <td><%= listUser[i].id %></td>
-          <td><%= listUser[i].email %></td>
-          <td><%= listUser[i].name %></td>
-          <td><%= listUser[i].city %></td>
-          <td>
-            <button>Edit</button>
-            <button>Delete</button>
-          </td>
-        </tr>
-        <% } %>  -->
         <% listUser.forEach(function(user,index) { %>
         <tr>
           <td><%= user.id %></td>

@@ -3,6 +3,7 @@ require("dotenv").config();
 const configViewEngine = require("./config/viewEngine");
 const webRouter = require("./routes/web");
 const connection = require("./config/database");
+const User = require("./models/user");
 
 const app = express(); //app express
 const port = process.env.PORT || 8888; //0 - 65535 not 21,23,80,443
@@ -19,8 +20,14 @@ configViewEngine(app);
 //app.METHOD(PATH,HANDLER)
 app.use("/", webRouter);
 
-//test connection
-
-app.listen(port, hostname, () => {
-  console.log(`app listening at port ${port}`);
-});
+(async () => {
+  //test connection
+  try {
+    await connection();
+    app.listen(port, hostname, () => {
+      console.log(`app listening at port ${port}`);
+    });
+  } catch (error) {
+    console.log(">>>Error connect to db:", error);
+  }
+})();
