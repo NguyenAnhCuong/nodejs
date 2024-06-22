@@ -8,8 +8,8 @@ const {
 const User = require("../models/user");
 
 const getHomePage = async (req, res) => {
-  // res.render("example.ejs");
-  let results = [];
+  // let results = await User.find({});
+  let results = await getAllUser();
   return res.render("homepage.ejs", { listUser: results });
 };
 
@@ -24,7 +24,7 @@ const postCreateUser = async (req, res) => {
     city,
   });
 
-  res.send("create user success");
+  res.redirect("/");
 };
 
 const getCreatePage = (req, res) => {
