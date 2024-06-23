@@ -2,6 +2,7 @@ const express = require("express"); // commonjs
 require("dotenv").config();
 const configViewEngine = require("./config/viewEngine");
 const webRouter = require("./routes/web");
+const apiRouter = require("./routes/api");
 const connection = require("./config/database");
 const User = require("./models/user");
 
@@ -18,7 +19,9 @@ configViewEngine(app);
 
 //declare route
 //app.METHOD(PATH,HANDLER)
+
 app.use("/", webRouter);
+app.use("/v1/api/", apiRouter);
 
 (async () => {
   //test connection
