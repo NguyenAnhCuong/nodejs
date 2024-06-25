@@ -4,11 +4,14 @@ const configViewEngine = require("./config/viewEngine");
 const webRouter = require("./routes/web");
 const apiRouter = require("./routes/api");
 const connection = require("./config/database");
-const User = require("./models/user");
+const fileUpload = require("express-fileupload");
 
 const app = express(); //app express
 const port = process.env.PORT || 8888; //0 - 65535 not 21,23,80,443
 const hostname = process.env.HOST_NAME;
+
+//config fileupload
+app.use(fileUpload()); //req.files
 
 //config req.body
 app.use(express.json());
