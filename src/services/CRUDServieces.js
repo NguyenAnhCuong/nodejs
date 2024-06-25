@@ -19,7 +19,8 @@ const updateUserById = async (email, name, city, userId) => {
 
 const deletUserById = async (userId) => {
   // await User.findByIdAndDelete(userId);
-  await User.deleteOne({ _id: userId });
+  let user = await User.deleteOne({ _id: userId });
+  return user;
 };
 
 module.exports = { deletUserById, updateUserById, getAllUser, getUserById };

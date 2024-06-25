@@ -1,14 +1,16 @@
 const express = require("express");
-const { getUserApi } = require("../controllers/apiController");
+const {
+  getUserApi,
+  postUserApi,
+  putUserApi,
+  deleteUserApi,
+} = require("../controllers/apiController");
 
 const routerApi = express.Router();
 
-routerApi.get("/", (req, res) => {
-  res.status(200).json({
-    data: "hello",
-  });
-});
-
 routerApi.get("/users", getUserApi);
+routerApi.post("/users", postUserApi);
+routerApi.put("/users", putUserApi);
+routerApi.delete("/users", deleteUserApi);
 
 module.exports = routerApi;
