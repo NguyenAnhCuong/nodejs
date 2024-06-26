@@ -4,6 +4,10 @@ const {
   updateUserById,
   deletUserById,
 } = require("../services/CRUDServieces");
+const {
+  uploadSingleFile,
+  uploadMutilFile,
+} = require("../services/fileService");
 const User = require("../models/user");
 
 const getUserApi = async (req, res) => {
@@ -56,4 +60,40 @@ const deleteUserApi = async (req, res) => {
   });
 };
 
-module.exports = { deleteUserApi, getUserApi, postUserApi, putUserApi };
+const postUploadSingleFile = async (req, res) => {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send("No files were uploaded.");
+  }
+
+  let result = await uploadSingleFile(req.files.image);
+
+  return res.status(200).json({
+    EC: 0,
+    result: result,
+  });
+};
+
+const postUploadMutipleFIle = async (req, res) => {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send("No files were uploaded.");
+  }
+  if (Array.isArray(req.files.image)) {
+    let result = await uploadMutilFile(req.files.image);
+
+    return res.status(200).json({
+      EC: 0,
+      result: result,
+    });
+  } else {
+    return await postUploadSingleFile(req, res);
+  }
+};
+
+module.exports = {
+  postUploadMutipleFIle,
+  postUploadSingleFile,
+  deleteUserApi,
+  getUserApi,
+  postUserApi,
+  putUserApi,
+};

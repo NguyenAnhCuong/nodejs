@@ -3,6 +3,7 @@ require("dotenv").config();
 const configViewEngine = require("./config/viewEngine");
 const webRouter = require("./routes/web");
 const apiRouter = require("./routes/api");
+const customerRouter = require("./routes/customerApi");
 const connection = require("./config/database");
 const fileUpload = require("express-fileupload");
 
@@ -25,6 +26,7 @@ configViewEngine(app);
 
 app.use("/", webRouter);
 app.use("/v1/api/", apiRouter);
+app.use("/v1/customer/", customerRouter);
 
 (async () => {
   //test connection
