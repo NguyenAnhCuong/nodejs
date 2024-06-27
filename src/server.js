@@ -26,7 +26,7 @@ configViewEngine(app);
 
 app.use("/", webRouter);
 app.use("/v1/api/", apiRouter);
-app.use("/v1/customer/", customerRouter);
+app.use("/v1/api/", customerRouter);
 
 (async () => {
   //test connection
