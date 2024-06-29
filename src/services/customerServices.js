@@ -1,7 +1,42 @@
 const Customer = require("../models/customer");
 
 module.exports = {
-  updateCustomer: async () => {},
+  delArrayCustomer: async (arrId) => {
+    try {
+      let result = await Customer.delete({ _id: { $in: arrId } });
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
+  delCustomer: async (customerId) => {
+    try {
+      let result = await Customer.deleteById(customerId);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
+  updateCustomer: async (customerId, dataCustomer) => {
+    try {
+      let result = await Customer.updateOne(
+        { _id: customerId },
+        {
+          name: dataCustomer.name,
+          phone: dataCustomer.phone,
+          address: dataCustomer.address,
+          description: dataCustomer.description,
+          email: dataCustomer.email,
+        }
+      );
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
   getAll: async () => {
     try {
       let result = await Customer.find({});

@@ -1,13 +1,77 @@
 const {
   createCustomer,
   createArrayCustomer,
+  updateCustomer,
   getAll,
+  delCustomer,
+  delArrayCustomer,
 } = require("../services/customerServices");
 const { uploadSingleFile } = require("../services/fileService");
 const Customer = require("../models/customer");
 
 module.exports = {
-  putUpdateCustomer: async (req, res) => {},
+  deleteArrayCustomer: async (req, res) => {
+    let result = await delArrayCustomer(req.body.customersId);
+
+    if (result) {
+      return res.status(200).json({
+        EC: 0,
+        EM: "Delete customers success",
+        data: result,
+      });
+    } else {
+      return res.status(200).json({
+        EC: -1,
+        EM: "Cannt delete customers",
+        data: result,
+      });
+    }
+  },
+  deleteCustomer: async (req, res) => {
+    let { customerId } = req.body;
+
+    let result = await delCustomer(customerId);
+    if (result) {
+      return res.status(200).json({
+        EC: 0,
+        EM: "Delete customers success",
+        data: result,
+      });
+    } else {
+      return res.status(200).json({
+        EC: -1,
+        EM: "Cannt delete customer",
+        data: result,
+      });
+    }
+  },
+  putUpdateCustomer: async (req, res) => {
+    let { customerId, name, phone, address, description, email } = req.body;
+
+    let customerData = {
+      name,
+      phone,
+      address,
+      description,
+      email,
+    };
+
+    let result = await updateCustomer(customerId, customerData);
+
+    if (result) {
+      return res.status(200).json({
+        EC: 0,
+        EM: "Update customers success",
+        data: result,
+      });
+    } else {
+      return res.status(200).json({
+        EC: -1,
+        EM: "Cannt update customer",
+        data: result,
+      });
+    }
+  },
   getAllCustomer: async (req, res) => {
     let result = await getAll();
     if (result) {
