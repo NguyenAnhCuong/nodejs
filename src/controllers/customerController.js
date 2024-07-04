@@ -75,9 +75,11 @@ module.exports = {
   getAllCustomer: async (req, res) => {
     let limit = req.query.limit;
     let page = req.query.page;
+    let name = req.query.name;
+
     let result = null;
     if (limit && page) {
-      result = await getAll(limit, page);
+      result = await getAll(limit, page, name, req.query);
     } else {
       result = await getAll();
     }
