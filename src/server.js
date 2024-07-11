@@ -3,7 +3,7 @@ require("dotenv").config();
 const configViewEngine = require("./config/viewEngine");
 const webRouter = require("./routes/web");
 const apiRouter = require("./routes/api");
-const { sequelize, connection } = require("./config/database");
+const { connection } = require("./config/database");
 const fileUpload = require("express-fileupload");
 
 const app = express();
@@ -28,7 +28,6 @@ app.use("/v1/api/", apiRouter);
   //test connection
   try {
     await connection();
-
     app.listen(port, hostname, () => {
       console.log(`App listening at port ${port}`);
     });

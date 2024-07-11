@@ -1,6 +1,6 @@
 const connection = require("../config/database");
 const {
-  getAllUser,
+  getAll,
   getUserById,
   updateUserById,
   deletUserById,
@@ -9,7 +9,11 @@ const {
 const getHomePage = async (req, res) => {
   // res.render("example.ejs");
   let results = await getAllUser();
-  return res.render("homepage.ejs", { listUser: results });
+  return res.status(200).json({
+    EC: 0,
+    data: results,
+  });
+  // return res.render("homepage.ejs", { listUser: results });
 };
 
 const postCreateUser = async (req, res) => {

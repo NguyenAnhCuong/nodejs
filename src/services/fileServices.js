@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs-extra");
 
 const uploadSingleFile = async (fileObject) => {
   let uploadPath = path.resolve(__dirname + "../../public/images/upload");
@@ -70,4 +71,37 @@ const uploadMutilFile = async (fileArray) => {
   }
 };
 
-module.exports = { uploadMutilFile, uploadSingleFile };
+const updateSingleFile = async (fileObject, existingFilePath) => {
+  let uploadPath = path.resolve(__dirname + "../../public/images/upload");
+
+  // extension name -- png/jpeg
+  let extName = path.extname(fileObject.name);
+
+  // image name (no extension)
+  let baseName = path.basename(fileObject.name, extName);
+
+  let finalName = `${baseName}-${Date.now()}${extName}`;
+  let finalPath = `${uploadPath}/${finalName}`;
+
+  // Use the mv() method to place the file somewhere on your server
+  try {
+    // Remove existing file if it exists
+    if (fs.existsSync(existingFilePath)) {
+      fs.unlinkSync(existingFilePath);
+    }
+    await fileObject.mv(finalPath);
+    return {
+      status: "success",
+      path: finalName,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      status: "failed",
+      path: null,
+      error: JSON.stringify(error),
+    };
+  }
+};
+
+module.exports = { uploadMutilFile, uploadSingleFile, updateSingleFile };
