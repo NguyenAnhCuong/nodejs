@@ -30,10 +30,10 @@ const updateUserById = async (userId, data) => {
     let result = await User.update(
       {
         name: data.name,
-        phone: data.phone,
         email: data.email,
         password: data.password,
         image: data.image,
+        role: data.role,
       },
       {
         where: {
@@ -48,7 +48,7 @@ const updateUserById = async (userId, data) => {
   }
 };
 
-const deletUserById = async (userId) => {
+const deleteUserById = async (userId) => {
   try {
     let result = await User.destroy({ where: { id: userId } });
 
@@ -63,10 +63,10 @@ const postOneUser = async (data) => {
   try {
     let result = await User.create({
       name: data.name,
-      phone: data.phone,
       email: data.email,
       password: data.password,
       image: data.image,
+      role: data.role,
     });
 
     return result;
@@ -89,7 +89,7 @@ const restoreDelete = async (id) => {
 module.exports = {
   restoreDelete,
   postOneUser,
-  deletUserById,
+  deleteUserById,
   updateUserById,
   getAll,
   getById,
