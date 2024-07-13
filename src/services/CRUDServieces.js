@@ -2,6 +2,7 @@ const { QueryTypes } = require("sequelize");
 const { sequelize } = require("../config/database");
 const User = require("../models/User");
 const { name } = require("ejs");
+const { Op } = require("sequelize");
 
 const getAll = async () => {
   try {
@@ -86,7 +87,39 @@ const restoreDelete = async (id) => {
   }
 };
 
+const postLoginUser = async (data) => {
+  try {
+    let result = await User.findAll({
+      where: {
+        [Op.and]: [{ email: data.email }, { password: data.password }],
+      },
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+const postRegisterUser = async (data) => {
+  try {
+    let result = await User.create({
+      email: data.email,
+      name: data.name,
+      password: data.password,
+      image: "",
+      role: "USER",
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
 module.exports = {
+  postRegisterUser,
+  postLoginUser,
   restoreDelete,
   postOneUser,
   deleteUserById,

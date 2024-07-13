@@ -5,6 +5,8 @@ const {
   deleteUserById,
   postOneUser,
   restoreDelete,
+  postLoginUser,
+  postRegisterUser,
 } = require("../services/CRUDServieces");
 const {
   uploadSingleFile,
@@ -338,6 +340,53 @@ module.exports = {
       return res.status(500).json({
         EC: -1,
         data: result,
+      });
+    }
+  },
+  loginUser: async (req, res) => {
+    let { email, password } = req.body;
+
+    let data = {
+      email,
+      password,
+    };
+
+    let result = await postLoginUser(data);
+
+    if (result.length > 0) {
+      return res.status(200).json({
+        EC: 0,
+        EM: "Login Success",
+        data: result,
+      });
+    } else {
+      return res.status(500).json({
+        EC: -1,
+        EM: "Login Failed",
+      });
+    }
+  },
+  registerUser: async (req, res) => {
+    let { email, name, password } = req.body;
+
+    let data = {
+      email,
+      name,
+      password,
+    };
+
+    let result = await postRegisterUser(data);
+
+    if (result) {
+      return res.status(200).json({
+        EC: 0,
+        EM: "Register Success",
+        data: result,
+      });
+    } else {
+      return res.status(500).json({
+        EC: -1,
+        EM: "Register Failed",
       });
     }
   },

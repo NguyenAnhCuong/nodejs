@@ -6,6 +6,8 @@ const {
   putUser,
   deleteUser,
   restoreUser,
+  loginUser,
+  registerUser,
 } = require("../controllers/userController");
 
 const apiRouter = express.Router();
@@ -16,5 +18,7 @@ apiRouter.post("/users", postUser);
 apiRouter.put("/users", putUser);
 apiRouter.delete("/users", deleteUser);
 apiRouter.delete("/restore-users", restoreUser);
+apiRouter.post("/login-user", loginUser);
+apiRouter.post("/register-user", registerUser);
 
 module.exports = apiRouter;
