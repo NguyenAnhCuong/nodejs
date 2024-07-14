@@ -3,6 +3,8 @@ const { sequelize } = require("../config/database");
 const User = require("../models/User");
 const { name } = require("ejs");
 const { Op } = require("sequelize");
+const bcrypt = require("bcrypt");
+const BlacklistedToken = require("../models/blacklistedToken");
 
 const getAll = async () => {
   try {
@@ -117,7 +119,18 @@ const postRegisterUser = async (data) => {
   }
 };
 
+const postLogOutUser = async (token) => {
+  try {
+    let result = await BlacklistedToken.create({ token });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
 module.exports = {
+  postLogOutUser,
   postRegisterUser,
   postLoginUser,
   restoreDelete,

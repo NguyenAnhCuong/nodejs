@@ -7,6 +7,7 @@ const {
   restoreDelete,
   postLoginUser,
   postRegisterUser,
+  postLogOutUser,
 } = require("../services/CRUDServieces");
 const {
   uploadSingleFile,
@@ -15,6 +16,9 @@ const {
 } = require("../services/fileServices");
 const path = require("path");
 const fs = require("fs-extra");
+const jwt = require("jsonwebtoken");
+
+const secretKey = "MySQL";
 
 module.exports = {
   getAllUser: async (req, res) => {
@@ -353,16 +357,21 @@ module.exports = {
 
     let result = await postLoginUser(data);
 
+    const token = jwt.sign({ id: result.id, role: result.role }, secretKey, {
+      expiresIn: "24h",
+    });
+
     if (result.length > 0) {
       return res.status(200).json({
         EC: 0,
         EM: "Login Success",
         data: result,
+        token,
       });
     } else {
       return res.status(500).json({
         EC: -1,
-        EM: "Login Failed",
+        EM: "Incorrect email or password",
       });
     }
   },
@@ -387,6 +396,24 @@ module.exports = {
       return res.status(500).json({
         EC: -1,
         EM: "Register Failed",
+      });
+    }
+  },
+  logoutUser: async (req, res) => {
+    const token = req.headers.authorization.split(" ")[1];
+
+    let result = await postLogOutUser(token);
+
+    if (result) {
+      return res.status(200).json({
+        EC: 0,
+        EM: "Log out Success",
+        data: result,
+      });
+    } else {
+      return res.status(500).json({
+        EC: -1,
+        EM: "Log out Failed",
       });
     }
   },
