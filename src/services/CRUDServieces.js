@@ -10,10 +10,10 @@ const getAll = async () => {
   try {
     // let result = await City.findAll({});
     let result = await User.findAll({});
-    return result;
+    return { success: true, data: result };
   } catch (error) {
     console.log(error);
-    return null;
+    return { success: false, errors: [error.message] };
   }
 };
 
@@ -21,10 +21,10 @@ const getById = async (userId) => {
   try {
     let result = await User.findOne({ where: { id: userId } });
     console.log(result);
-    return result;
+    return { success: true, data: result };
   } catch (error) {
     console.log(error);
-    return null;
+    return { success: false, errors: [error.message] };
   }
 };
 
@@ -44,10 +44,10 @@ const updateUserById = async (userId, data) => {
         },
       }
     );
-    return result;
+    return { success: true, data: result };
   } catch (error) {
     console.log(error);
-    return null;
+    return { success: false, errors: [error.message] };
   }
 };
 
@@ -55,10 +55,10 @@ const deleteUserById = async (userId) => {
   try {
     let result = await User.destroy({ where: { id: userId } });
 
-    return result;
+    return { success: true, data: result };
   } catch (error) {
     console.log(error);
-    return null;
+    return { success: false, errors: [error.message] };
   }
 };
 
@@ -72,20 +72,20 @@ const postOneUser = async (data) => {
       role: data.role,
     });
 
-    return result;
+    return { success: true, data: result };
   } catch (error) {
     console.log(error);
-    return null;
+    return { success: false, errors: [error.message] };
   }
 };
 
 const restoreDelete = async (id) => {
   try {
     let result = await User.restore({ where: { id: id } });
-    return result;
+    return { success: true, data: result };
   } catch (error) {
     console.log(error);
-    return null;
+    return { success: false, errors: [error.message] };
   }
 };
 
@@ -112,10 +112,15 @@ const postRegisterUser = async (data) => {
       image: "",
       role: "USER",
     });
-    return result;
+    return { success: true, data: result };
   } catch (error) {
     console.log(error);
-    return null;
+    if (error.name === "SequelizeUniqueConstraintError") {
+      const validationErrors = error.errors.map((err) => err.message);
+      return { success: false, errors: validationErrors };
+    } else {
+      return { success: false, errors: [error.message] };
+    }
   }
 };
 

@@ -17,6 +17,7 @@ const {
 const path = require("path");
 const fs = require("fs-extra");
 const jwt = require("jsonwebtoken");
+const { error } = require("console");
 
 const secretKey = "MySQL";
 
@@ -24,15 +25,15 @@ module.exports = {
   getAllUser: async (req, res) => {
     let result = await getAll();
 
-    if (result) {
+    if (result.success) {
       return res.status(200).json({
         EC: 0,
-        data: result,
+        data: result.data,
       });
     } else {
       return res.status(500).json({
         EC: -1,
-        data: result,
+        error: result.errors,
       });
     }
   },
@@ -40,15 +41,15 @@ module.exports = {
     let id = req.body.id;
 
     let result = await getById(id);
-    if (result) {
+    if (result.success) {
       return res.status(200).json({
         EC: 0,
-        data: result,
+        data: result.data,
       });
     } else {
       return res.status(500).json({
         EC: -1,
-        data: result,
+        error: result.errors,
       });
     }
   },
@@ -147,7 +148,7 @@ module.exports = {
     // Gọi API để tạo người dùng mới
     let user = await postOneUser(data);
 
-    if (user) {
+    if (user.success) {
       // Kiểm tra xem có file được gửi lên hay không
       if (req.files && Object.keys(req.files).length > 0) {
         try {
@@ -168,13 +169,14 @@ module.exports = {
 
       return res.status(200).json({
         EC: 0,
-        data: user,
+        EM: "Create User Success",
+        data: user.data,
       });
     } else {
       return res.status(500).json({
         EC: -1,
         EM: "Error creating user.",
-        data: user,
+        error: user.errors,
       });
     }
   },
@@ -215,13 +217,13 @@ module.exports = {
         data.image = "";
       }
 
-      let updatedUser = await updateUserById(id, data);
+      let result = await updateUserById(id, data);
 
-      if (updatedUser) {
+      if (result.success) {
         return res.status(200).json({
           EC: 0,
           EM: "Update success",
-          data: updatedUser,
+          data: result.data,
         });
       } else {
         if (imageUrl) {
@@ -230,7 +232,7 @@ module.exports = {
         return res.status(500).json({
           EC: -1,
           EM: "Update failed",
-          data: updatedUser,
+          error: result.errors,
         });
       }
     } catch (error) {
@@ -319,15 +321,17 @@ module.exports = {
     let id = req.body.id;
     let result = await deleteUserById(id);
 
-    if (result) {
+    if (result.success) {
       return res.status(200).json({
         EC: 0,
-        data: result,
+        EM: "Delete User Success",
+        data: result.data,
       });
     } else {
       return res.status(500).json({
         EC: -1,
-        data: result,
+        EM: "Delete User Success",
+        error: result.errors,
       });
     }
   },
@@ -335,15 +339,15 @@ module.exports = {
     let id = req.body.id;
 
     let result = await restoreDelete(id);
-    if (result) {
+    if (result.success) {
       return res.status(200).json({
         EC: 0,
-        data: result,
+        data: result.data,
       });
     } else {
       return res.status(500).json({
         EC: -1,
-        data: result,
+        data: result.errors,
       });
     }
   },
@@ -386,16 +390,17 @@ module.exports = {
 
     let result = await postRegisterUser(data);
 
-    if (result) {
+    if (result.success) {
       return res.status(200).json({
         EC: 0,
         EM: "Register Success",
-        data: result,
+        data: result.data,
       });
     } else {
       return res.status(500).json({
         EC: -1,
         EM: "Register Failed",
+        error: result.errors,
       });
     }
   },
@@ -408,7 +413,6 @@ module.exports = {
       return res.status(200).json({
         EC: 0,
         EM: "Log out Success",
-        data: result,
       });
     } else {
       return res.status(500).json({
