@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
 const { sequelize } = require("../config/database");
 const Project = require("../models/Project");
+const User = require("./User");
 
 class Task extends Model {}
 
@@ -37,19 +38,19 @@ Task.init(
       type: DataTypes.ENUM("pending", "in_progress", "completed", "cancelled"),
       defaultValue: "pending",
     },
-    priority: {
-      type: DataTypes.ENUM("low", "medium", "high"),
-      defaultValue: "medium",
-    },
     deadline: {
       type: DataTypes.DATEONLY,
-      validate: {
-        isDate: true,
-      },
+      defaultValue: Sequelize.NOW,
     },
-    assigned_user_id: {
+    user_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     parent_task_id: {
       type: DataTypes.INTEGER,
@@ -67,12 +68,23 @@ Task.init(
     tableName: "Tasks",
     paranoid: true,
     hooks: {
-      beforeSave: async (task, options) => {},
+      beforeSave: async (task, options) => {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, "0");
+        const dd = String(today.getDate()).padStart(2, "0");
+        const presentDay = `${yyyy}-${mm}-${dd}`;
+        if (!task.deadline) {
+          task.deadline = presentDay;
+        }
+        if (task.deadline < presentDay) {
+          throw new Error(`deadline must be after ${presentDay}`);
+        }
+      },
     },
   }
 );
 
-// Thiết lập quan hệ
 Project.hasMany(Task, {
   foreignKey: "project_id",
 });
@@ -87,6 +99,13 @@ Task.hasMany(Task, {
 Task.belongsTo(Task, {
   as: "parent",
   foreignKey: "parent_task_id",
+});
+
+User.hasMany(Task, {
+  foreignKey: "user_id",
+});
+Task.belongsTo(User, {
+  foreignKey: "user_id",
 });
 
 module.exports = Task;

@@ -18,15 +18,15 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true, // Không được để trống
+        notEmpty: true,
       },
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true, // Không được để trống
-        isEmail: true, // Phải là email hợp lệ
+        notEmpty: true,
+        isEmail: true,
       },
     },
     image: {
@@ -36,14 +36,14 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true, // Không được để trống
+        notEmpty: true,
       },
     },
     role: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true, // Không được để trống
+        notEmpty: true,
       },
     },
   },

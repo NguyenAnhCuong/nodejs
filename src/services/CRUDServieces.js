@@ -116,8 +116,8 @@ const postRegisterUser = async (data) => {
   } catch (error) {
     console.log(error);
     if (error.name === "SequelizeUniqueConstraintError") {
-      const validationErrors = error.errors.map((err) => err.message);
-      return { success: false, errors: validationErrors };
+      // const validationErrors = error.errors.map((err) => err.message);
+      return { success: false, errors: "Email is already exist" };
     } else {
       return { success: false, errors: [error.message] };
     }
