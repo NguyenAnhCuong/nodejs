@@ -7,6 +7,7 @@ const projectRouter = require("./routes/project");
 const taskRouter = require("./routes/task");
 const { connection } = require("./config/database");
 const fileUpload = require("express-fileupload");
+const cors = require("cors");
 
 const app = express();
 const port = process.env.PORT || 8888;
@@ -14,6 +15,9 @@ const hostname = process.env.HOST_NAME;
 
 //config fileupload
 app.use(fileUpload());
+
+//config CORS
+app.use(cors());
 
 //config req.body
 app.use(express.json());

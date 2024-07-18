@@ -18,17 +18,29 @@ const path = require("path");
 const fs = require("fs-extra");
 const jwt = require("jsonwebtoken");
 const { error } = require("console");
+const User = require("../models/User");
 
 const secretKey = "MySQL";
 
 module.exports = {
   getAllUser: async (req, res) => {
-    let result = await getAll();
+    let limit = req.query.limit;
+    let page = req.query.page;
+    let result = null;
+    let totalPages = 0;
+
+    if (limit && page) {
+      result = await getAll(limit, page);
+      totalPages = Math.ceil(result.totalRecords / limit);
+    } else {
+      result = await getAll();
+    }
 
     if (result.success) {
       return res.status(200).json({
         EC: 0,
         data: result.data,
+        totalPages: totalPages === 0 ? 0 : totalPages,
       });
     } else {
       return res.status(500).json({
@@ -138,35 +150,27 @@ module.exports = {
     let { name, email, password, role } = req.body;
     let imageUrl = "";
 
+    if (!req.files || Object.keys(req.files).length === 0) {
+      // return res.status(500).json({
+      //   EC: -1,
+      //   error: "Required Image",
+      // });
+    } else {
+      let result = await uploadSingleFile(req.files.image);
+      imageUrl = result.path;
+    }
+
     let data = {
       name,
       email,
       password,
       role,
+      image: imageUrl,
     };
 
-    // Gọi API để tạo người dùng mới
     let user = await postOneUser(data);
 
     if (user.success) {
-      // Kiểm tra xem có file được gửi lên hay không
-      if (req.files && Object.keys(req.files).length > 0) {
-        try {
-          let result = await uploadSingleFile(req.files.image);
-          imageUrl = result.path;
-
-          user.image = imageUrl;
-          await user.save();
-        } catch (error) {
-          await deleteUserById(user.id);
-          return res.status(500).json({
-            EC: -1,
-            EM: "Error uploading file.",
-            error: error.message,
-          });
-        }
-      }
-
       return res.status(200).json({
         EC: 0,
         EM: "Create User Success",

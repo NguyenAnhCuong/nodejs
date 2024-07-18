@@ -17,7 +17,7 @@ module.exports = {
       return { success: true, data: result };
     } catch (error) {
       console.log(error);
-      return { success: false, errors: [error.message] };
+      return { success: false, errors: error.message };
     }
   },
   getAll: async () => {
@@ -26,7 +26,7 @@ module.exports = {
       return { success: true, data: result };
     } catch (error) {
       console.log(error);
-      return { success: false, errors: [error.message] };
+      return { success: false, errors: error.message };
     }
   },
   putTask: async (data) => {
@@ -66,7 +66,7 @@ module.exports = {
       return { success: true, data: result };
     } catch (error) {
       console.log(error);
-      return { success: false, errors: [error.message] };
+      return { success: false, errors: error.message };
     }
   },
   deleteAProject: async (id) => {
@@ -75,7 +75,7 @@ module.exports = {
       return { success: true, data: result };
     } catch (error) {
       console.log(error);
-      return { success: false, errors: [error.message] };
+      return { success: false, errors: error.message };
     }
   },
   deleteATask: async (id) => {
@@ -84,7 +84,7 @@ module.exports = {
       return { success: true, data: result };
     } catch (error) {
       console.log(error);
-      return { success: false, errors: [error.message] };
+      return { success: false, errors: error.message };
     }
   },
 };
