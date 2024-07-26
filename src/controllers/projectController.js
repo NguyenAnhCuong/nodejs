@@ -7,7 +7,8 @@ const {
 
 module.exports = {
   getAllProject: async (req, res) => {
-    let result = await getAll();
+    let userId = req.user.id;
+    let result = await getAll(userId);
 
     if (result.success) {
       return res.status(200).json({
@@ -25,12 +26,14 @@ module.exports = {
   },
   createProject: async (req, res) => {
     let { name, description, start_date, end_date } = req.body;
+    let userId = req.user.id;
 
     let data = {
       name,
       description,
       start_date,
       end_date,
+      user_id: userId,
     };
 
     let result = await postProject(data);

@@ -365,24 +365,30 @@ module.exports = {
 
     let result = await postLoginUser(data);
 
-    const token = jwt.sign({ id: result.id, role: result.role }, secretKey, {
-      expiresIn: "24h",
-    });
+    if (result.success) {
+      const token = jwt.sign(
+        { id: result.data.id, role: result.data.role },
+        secretKey,
+        {
+          expiresIn: "24h",
+        }
+      );
 
-    if (result.length > 0) {
       return res.status(200).json({
         EC: 0,
         EM: "Login Success",
-        data: result,
+        data: result.data,
         token,
       });
     } else {
       return res.status(500).json({
         EC: -1,
-        EM: "Incorrect email or password",
+        EM: result.message,
+        error: result.error,
       });
     }
   },
+
   registerUser: async (req, res) => {
     let { email, name, password } = req.body;
 
@@ -409,11 +415,12 @@ module.exports = {
     }
   },
   logoutUser: async (req, res) => {
+    const email = req.body.email;
     const token = req.headers.authorization.split(" ")[1];
 
-    let result = await postLogOutUser(token);
+    let result = await postLogOutUser(email, token);
 
-    if (result) {
+    if (result.success) {
       return res.status(200).json({
         EC: 0,
         EM: "Log out Success",

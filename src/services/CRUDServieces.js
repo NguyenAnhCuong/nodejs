@@ -44,7 +44,6 @@ const updateUserById = async (userId, data) => {
       {
         name: data.name,
         email: data.email,
-        password: data.password,
         image: data.image,
         role: data.role,
       },
@@ -123,10 +122,15 @@ const postLoginUser = async (data) => {
         [Op.and]: [{ email: data.email }, { password: data.password }],
       },
     });
-    return result;
+
+    if (result.length > 0) {
+      return { success: true, data: result[0] };
+    } else {
+      return { success: false, message: "Incorrect email or password" };
+    }
   } catch (error) {
     console.log(error);
-    return null;
+    return { success: false, message: "An error occurred", error };
   }
 };
 
@@ -158,13 +162,22 @@ const postRegisterUser = async (data) => {
   }
 };
 
-const postLogOutUser = async (token) => {
+const postLogOutUser = async (email, token) => {
   try {
-    let result = await BlacklistedToken.create({ token });
-    return result;
+    await BlacklistedToken.create({ token });
+    let result = await User.findAll({
+      where: {
+        email,
+      },
+    });
+    if (result.length > 0) {
+      return { success: true };
+    } else {
+      return { success: false };
+    }
   } catch (error) {
     console.log(error);
-    return null;
+    return { success: false, message: "An error occurred", error };
   }
 };
 

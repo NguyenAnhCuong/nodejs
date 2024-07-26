@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
 const { sequelize } = require("../config/database");
+const User = require("./User");
 
 class Project extends Model {}
 
@@ -35,6 +36,16 @@ Project.init(
         isDate: true,
       },
     },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
   },
   {
     sequelize,
@@ -56,5 +67,12 @@ Project.init(
     },
   }
 );
+
+User.hasMany(Project, {
+  foreignKey: "user_id",
+});
+Project.belongsTo(User, {
+  foreignKey: "user_id",
+});
 
 module.exports = Project;

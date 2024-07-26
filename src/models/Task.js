@@ -42,16 +42,6 @@ Task.init(
       type: DataTypes.DATEONLY,
       defaultValue: Sequelize.NOW,
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: User,
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
-    },
     parent_task_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -99,13 +89,6 @@ Task.hasMany(Task, {
 Task.belongsTo(Task, {
   as: "parent",
   foreignKey: "parent_task_id",
-});
-
-User.hasMany(Task, {
-  foreignKey: "user_id",
-});
-Task.belongsTo(User, {
-  foreignKey: "user_id",
 });
 
 module.exports = Task;
