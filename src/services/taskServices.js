@@ -11,7 +11,6 @@ module.exports = {
         description: data.description,
         status: data.status,
         deadline: data.deadline,
-        user_id: data.user_id,
         parent_task_id: data.parent_task_id,
       });
       return { success: true, data: result };
@@ -20,9 +19,13 @@ module.exports = {
       return { success: false, errors: error.message };
     }
   },
-  getAll: async () => {
+  getAll: async (id) => {
     try {
-      let result = await Task.findAll({});
+      let result = await Task.findAll({
+        where: {
+          project_id: id,
+        },
+      });
       return { success: true, data: result };
     } catch (error) {
       console.log(error);

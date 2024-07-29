@@ -7,7 +7,8 @@ const {
 
 module.exports = {
   getAllTask: async (req, res) => {
-    let result = await getAll();
+    let { id } = req.query;
+    let result = await getAll(id);
 
     if (result.success) {
       return res.status(200).json({
@@ -24,15 +25,8 @@ module.exports = {
     }
   },
   createTask: async (req, res) => {
-    let {
-      project_id,
-      name,
-      description,
-      status,
-      deadline,
-      user_id,
-      parent_task_id,
-    } = req.body;
+    let { project_id, name, description, status, deadline, parent_task_id } =
+      req.body;
 
     let data = {
       project_id,
@@ -40,7 +34,6 @@ module.exports = {
       description,
       status,
       deadline,
-      user_id,
       parent_task_id: parent_task_id || null,
     };
 
