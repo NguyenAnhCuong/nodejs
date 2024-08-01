@@ -61,7 +61,6 @@ module.exports = {
       description,
       status,
       deadline,
-      user_id,
       parent_task_id,
     } = req.body;
 
@@ -72,7 +71,6 @@ module.exports = {
       description,
       status,
       deadline,
-      user_id,
       parent_task_id: parent_task_id || null,
     };
 

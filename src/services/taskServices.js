@@ -57,7 +57,6 @@ module.exports = {
           description: data.description,
           status: data.status,
           deadline: data.deadline,
-          user_id: data.user_id,
         },
         {
           where: {
